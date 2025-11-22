@@ -13,10 +13,10 @@
     <style>
         :root {
             --bg-color: #1a1a1a;
-            --cake-color: #ffffff; /* Bánh màu trắng */
-            --icing-color: #ff80ab; /* Kem màu hồng */
+            --cake-color: #ffffff;
+            --icing-color: #ff80ab;
             --flame-color: #ff9800;
-            --candle-color: #2196f3; /* Nến xanh dương */
+            --candle-color: #2196f3;
         }
 
         body {
@@ -58,7 +58,7 @@
             margin: 0 auto;
             margin-top: 50px;
             transition: transform 0.5s;
-            cursor: pointer; /* Con trỏ tay để biết là ấn được */
+            cursor: pointer;
             z-index: 10;
         }
 
@@ -118,35 +118,55 @@
         
         .candle {
             position: absolute;
-            width: 16px; /* Tăng kích thước nến để dễ ấn */
+            width: 16px;
             height: 50px;
             background: var(--candle-color);
             bottom: 160px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 20; /* Tăng z-index để nổi lên trên */
+            z-index: 20;
             border-radius: 3px;
             display: none; 
             background: repeating-linear-gradient(45deg, #2196f3, #2196f3 5px, #64b5f6 5px, #64b5f6 10px);
+            cursor: pointer;
         }
 
+        /* --- CẬP NHẬT PHẦN LỬA ĐỂ TẮT HẲN --- */
         .flame {
             position: absolute;
-            width: 20px; /* Tăng lửa to hơn chút để dễ ấn */
+            width: 20px;
             height: 30px;
             background: var(--flame-color);
             border-radius: 50% 50% 20% 20%;
             top: -30px;
             left: -2px;
             animation: flicker 1s infinite alternate;
-            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800;
             cursor: pointer;
+            z-index: 30;
+            
+            /* Trạng thái tắt: Không màu, không bóng, ẩn hoàn toàn */
             opacity: 0;
-            transition: opacity 0.5s;
-            z-index: 30; /* Lửa cao nhất */
+            box-shadow: none; 
+            visibility: hidden; 
+            transition: opacity 0.3s ease, visibility 0.3s;
         }
 
-        .flame.lit { opacity: 1; }
+        /* Mở rộng vùng bấm (vẫn giữ để dễ bật/tắt nhưng khi ẩn thì visibility:hidden sẽ chặn bấm nhầm) */
+        .flame::after {
+            content: '';
+            position: absolute;
+            top: -50px; left: -50px; right: -50px; bottom: -50px;
+            background: transparent;
+            border-radius: 50%;
+            z-index: 50;
+        }
+
+        /* Trạng thái BẬT: Có màu, có bóng hào quang */
+        .flame.lit {
+            opacity: 1;
+            visibility: visible;
+            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800; /* Hào quang chỉ hiện khi lit */
+        }
 
         @keyframes flicker {
             0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
@@ -248,11 +268,11 @@
             <h1 id="b-name" class="text-5xl md:text-6xl text-pink-600 mb-2 drop-shadow-lg font-bold"></h1>
         </div>
 
-        <!-- Thêm sự kiện onclick vào toàn bộ vùng bánh để dễ ấn -->
-        <div class="cake-container cursor-pointer z-10" id="cake-area" onclick="blowOutCandle()">
-            <!-- Thêm sự kiện onclick trực tiếp vào nến và lửa -->
-            <div class="candle" id="candle" onclick="blowOutCandle()">
-                <div class="flame" id="flame" onclick="blowOutCandle()"></div>
+        <!-- Bắt sự kiện click vào cả vùng bánh -->
+        <div class="cake-container cursor-pointer z-10" id="cake-area" onclick="blowOutCandle(event)">
+            <!-- Bắt sự kiện click vào nến và lửa -->
+            <div class="candle" id="candle" onclick="blowOutCandle(event)">
+                <div class="flame" id="flame" onclick="blowOutCandle(event)"></div>
             </div>
             <div class="layer layer-top">
                 <div class="icing"><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div></div>
@@ -264,11 +284,11 @@
         </div>
 
         <button id="btn-start-party" onclick="startPartySequence()" class="z-20 mt-12 bg-pink-500 hover:bg-pink-400 text-white px-8 py-3 rounded-full shadow-lg animate-bounce text-xl font-bold">
-            Tiếp tục ️
+            Tiếp tục ❤️
         </button>
 
         <div id="blow-instruction" class="hidden-elm z-20 text-center mt-12 px-4">
-            <p class="text-xl md:text-2xl text-pink-600 font-bold drop-shadow-sm">🎂 Thổi mạnh vào mic để tắt nến nhé! </p>
+            <p class="text-xl md:text-2xl text-pink-600 font-bold drop-shadow-sm">🎂 Thổi mạnh vào mic để tắt nến nhé! 💨</p>
             <div id="mic-meter-container">
                 <div id="mic-meter-fill"></div>
             </div>
@@ -283,7 +303,7 @@
 
         <div id="controls" class="absolute bottom-20 flex justify-center z-30 hidden-elm w-full px-4">
             <div class="control-btn" onclick="toggleMusic()" title="Bật/Tắt nhạc"><i class="fas fa-music" id="icon-music"></i></div>
-            <div class="control-btn" onclick="toggleCandleManual()" title="Bật lại nến"><i class="fas fa-fire"></i></div>
+            <div class="control-btn" onclick="toggleCandleManual(event)" title="Bật lại nến"><i class="fas fa-fire"></i></div>
             <div class="control-btn" onclick="showInfo()" title="Hướng dẫn"><i class="fas fa-info"></i></div>
             <div class="control-btn" onclick="shareWeb()" title="Chia sẻ"><i class="fas fa-share"></i></div>
             <a href="https://m.me/thanhloc2906208" target="_blank" class="control-btn bg-blue-600 hover:bg-blue-500 border-blue-400" title="Cảm ơn (Messenger)">
@@ -444,13 +464,13 @@
 
         // Hàm tắt nến
         function blowOutCandle(event) {
-            // Ngăn sự kiện click lan truyền nếu cần thiết, nhưng ở đây cho phép để đảm bảo ăn click
             if(event) event.stopPropagation();
 
-            // Chỉ tắt nếu nến đang cháy
             if (!flame.classList.contains('lit')) return;
 
+            // Xóa class lit để tắt các hiệu ứng sáng
             flame.classList.remove('lit'); 
+            
             document.getElementById('blow-instruction').classList.add('hidden-elm');
             const msg = document.getElementById('b-message');
             msg.classList.remove('hidden-elm');
