@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Confetti Effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #1a1a1a; /* Mặc định màu tối cho màn hình khóa */
+            --cake-color: #f8bbd0;
+            --icing-color: #f48fb1;
+            --flame-color: #ff9800;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            transition: background-color 1.5s ease;
+            overflow: hidden;
+            font-family: 'Pacifico', cursive;
+            color: white;
+        }
+
+        /* Hiệu ứng Neon cho khung mật khẩu */
+        .neon-box {
+            box-shadow: 0 0 10px #00bcd4, 0 0 20px #00bcd4, 0 0 40px #00bcd4;
+            border: 1px solid #00bcd4;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Cake CSS */
+        .cake-container {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            margin: 0 auto;
+            margin-top: 50px;
+            transition: transform 0.5s;
+        }
+
+        .plate {
+            width: 270px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .layer {
+            position: absolute;
+            background: var(--cake-color);
+            width: 250px;
+            height: 80px;
+            border-radius: 10px 10px 0 0;
+            bottom: 10px;
+            box-shadow: inset 0 -10px 10px rgba(0,0,0,0.05);
+        }
+
+        .layer-top {
+            bottom: 90px;
+            width: 200px;
+            left: 25px;
+            height: 70px;
+            background: #f06292;
+        }
+
+        .icing {
+            position: absolute;
+            background: var(--icing-color);
+            width: 100%;
+            height: 20px;
+            border-radius: 10px 10px 20px 20px;
+            top: 0;
+            z-index: 1;
+        }
+
+        .drip {
+            position: absolute;
+            background: var(--icing-color);
+            width: 15px;
+            height: 35px;
+            border-radius: 0 0 10px 10px;
+            top: 10px;
+        }
+        .drip:nth-child(1) { left: 10px; height: 45px; }
+        .drip:nth-child(2) { left: 40px; height: 30px; }
+        .drip:nth-child(3) { left: 70px; height: 40px; }
+        .drip:nth-child(4) { left: 100px; height: 35px; }
+        .drip:nth-child(5) { left: 130px; height: 45px; }
+        .drip:nth-child(6) { left: 160px; height: 30px; }
+        
+        /* Candle */
+        .candle {
+            position: absolute;
+            width: 10px;
+            height: 40px;
+            background: linear-gradient(to bottom, #fff, #ddd);
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            border-radius: 3px;
+            display: none; /* Ẩn ban đầu */
+        }
+
+        .flame {
+            position: absolute;
+            width: 12px;
+            height: 20px;
+            background: var(--flame-color);
+            border-radius: 50% 50% 20% 20%;
+            top: -20px;
+            left: -1px;
+            animation: flicker 1s infinite alternate;
+            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800;
+            cursor: pointer;
+            opacity: 0; /* Tắt lửa ban đầu */
+            transition: opacity 0.5s;
+        }
+
+        .flame.lit {
+            opacity: 1;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+        }
+
+        /* Control Bar */
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin: 0 5px;
+        }
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: rgba(0,0,0,0.9);
+        }
+
+        /* Animations */
+        .float-up { animation: floatUp 10s linear infinite; }
+        @keyframes floatUp {
+            0% { bottom: -100px; transform: translateX(0); }
+            50% { transform: translateX(20px); }
+            100% { bottom: 120vh; transform: translateX(-20px); }
+        }
+
+        .hidden-elm { display: none; }
+        .fade-in { animation: fadeIn 1s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Input Custom */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .glass-input::placeholder { color: #aaa; }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center relative">
+
+    <!-- VIEW 1: CREATOR INTERFACE (Tạo Link) -->
+    <div id="creator-view" class="w-full max-w-md p-6 hidden-elm">
+        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700 text-center">
+            <h1 class="text-3xl mb-6 text-pink-400">🎁 Tạo Quà Sinh Nhật</h1>
+            <input type="text" id="c-name" class="glass-input" placeholder="Tên người nhận (VD: Linh)">
+            <input type="date" id="c-dob" class="glass-input">
+            <input type="text" id="c-pass" class="glass-input" placeholder="Đặt mật khẩu (VD: 1234)">
+            
+            <button onclick="generateLink()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition mt-4">
+                <i class="fas fa-link mr-2"></i> Tạo & Copy Link
+            </button>
+            <p class="text-xs text-gray-400 mt-4 italic">*Sau khi ấn nút, gửi link vừa copy cho người ấy nhé!</p>
+        </div>
+    </div>
+
+    <!-- VIEW 2: LOCK SCREEN (Màn hình khóa) -->
+    <div id="lock-screen" class="w-full max-w-md p-6 hidden-elm z-50">
+        <div class="neon-box p-8 rounded-xl text-center">
+            <h2 class="text-2xl text-red-500 font-bold mb-2" style="font-family: sans-serif;">TRANG NÀY ĐÃ ĐƯỢC KHÓA</h2>
+            <p class="text-orange-400 text-sm mb-6" style="font-family: monospace;">MUỐN MỞ HÃY NHẬP MẬT KHẨU</p>
+            
+            <input type="password" id="unlock-pass" class="bg-gray-900 border-b-2 border-gray-600 text-white text-center p-2 w-full mb-2 outline-none focus:border-blue-500" placeholder="Enter password">
+            <p class="text-xs text-gray-400 mb-6" style="font-family: monospace;">NHẬP PHẢI ĐÚNG NHA</p>
+            
+            <button onclick="checkPassword()" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-2 rounded shadow-lg hover:opacity-90 transition">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- VIEW 3: BIRTHDAY PARTY (Giao diện chính) -->
+    <div id="party-view" class="hidden-elm w-full h-full flex flex-col items-center justify-center relative">
+        
+        <!-- Header Text -->
+        <div class="z-20 text-center mt-10 absolute top-10 w-full">
+            <h1 id="b-name" class="text-5xl md:text-6xl text-pink-600 mb-2 drop-shadow-lg hidden-elm"></h1>
+        </div>
+
+        <!-- Cake Area -->
+        <div class="cake-container cursor-pointer z-10" id="cake-area">
+            <div class="candle" id="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+            <div class="layer layer-top">
+                <div class="icing">
+                    <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                </div>
+            </div>
+            <div class="layer">
+                <div class="icing">
+                    <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                </div>
+            </div>
+            <div class="plate"></div>
+        </div>
+
+        <!-- Step 1 Button: Tiếp tục -->
+        <button id="btn-start-party" onclick="startPartySequence()" class="z-20 mt-12 bg-pink-500 hover:bg-pink-400 text-white px-6 py-2 rounded-full shadow-lg animate-bounce">
+            Tiếp tục ❤️
+        </button>
+
+        <!-- Step 2 Instruction: Thổi nến -->
+        <p id="blow-instruction" class="hidden-elm text-xl md:text-2xl text-pink-600 mt-12 animate-pulse font-bold z-20 text-center px-4">
+            🎂 Thổi mạnh vào mic để tắt nến nhé! 💨
+        </p>
+
+        <!-- Step 3 Message: Lời chúc -->
+        <div id="b-message" class="hidden-elm text-center mt-8 z-20 max-w-lg px-4">
+            <p class="text-2xl text-gray-800 dark:text-white leading-relaxed">
+                Chúc mừng sinh nhật! Tuổi mới rực rỡ như pháo hoa, ngọt ngào như chiếc bánh này nhé! 
+            </p>
+        </div>
+
+        <!-- Control Bar (Bottom) -->
+        <div id="controls" class="absolute bottom-10 flex justify-center z-30 hidden-elm">
+            <div class="control-btn" onclick="toggleMusic()" title="Bật/Tắt nhạc"><i class="fas fa-music" id="icon-music"></i></div>
+            <div class="control-btn" onclick="toggleCandleManual()" title="Bật lại nến"><i class="fas fa-fire"></i></div>
+            <div class="control-btn" onclick="showInfo()" title="Hướng dẫn"><i class="fas fa-info"></i></div>
+            <div class="control-btn" onclick="shareWeb()" title="Chia sẻ"><i class="fas fa-share"></i></div>
+            <!-- Nút Cảm ơn (Messenger) -->
+            <a href="https://m.me/thanhloc2906208" target="_blank" class="control-btn bg-blue-600 hover:bg-blue-500" title="Cảm ơn (Messenger)">
+                <span class="text-xs font-bold">Cảm ơn</span>
+            </a>
+        </div>
+
+        <!-- Balloons Container -->
+        <div id="balloons"></div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="nhacsinhnhat.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // --- HELPER: SAFE COPY ---
+        function copyToClipboard(text) {
+            // Fallback cho môi trường chặn navigator.clipboard (như iframe)
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Copying text command was ' + msg);
+                return true;
+            } catch (err) {
+                console.error('Oops, unable to copy', err);
+                return false;
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // --- LOGIC XỬ LÝ DỮ LIỆU URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const p_name = urlParams.get('name');
+        const p_dob = urlParams.get('dob');
+        const p_pass = urlParams.get('pass'); // Mật khẩu dạng base64
+
+        let audioContext;
+        let microphone;
+        let analyser;
+        const music = document.getElementById('bgMusic');
+        const flame = document.getElementById('flame');
+        
+        // KHỞI TẠO GIAO DIỆN
+        window.onload = () => {
+            if (p_name && p_pass) {
+                // Có dữ liệu -> Hiện màn hình khóa
+                document.getElementById('lock-screen').classList.remove('hidden-elm');
+                document.title = "Món quà bí mật cho " + atob(p_name);
+            } else {
+                // Không có dữ liệu -> Hiện giao diện tạo quà
+                document.getElementById('creator-view').classList.remove('hidden-elm');
+                document.body.style.backgroundColor = '#1f2937'; // Dark gray for creator
+            }
+        };
+
+        // --- CHỨC NĂNG NGƯỜI TẠO ---
+        function generateLink() {
+            const name = document.getElementById('c-name').value;
+            const dob = document.getElementById('c-dob').value;
+            const pass = document.getElementById('c-pass').value;
+
+            if(!name || !pass) { alert("Vui lòng nhập tên và mật khẩu!"); return; }
+
+            // Mã hóa đơn giản (Base64) để link trông gọn hơn
+            const encodedName = btoa(unescape(encodeURIComponent(name)));
+            const encodedPass = btoa(pass);
+            
+            const currentUrl = window.location.href.split('?')[0];
+            const fullLink = `${currentUrl}?name=${encodedName}&dob=${dob}&pass=${encodedPass}`;
+
+            const success = copyToClipboard(fullLink);
+            if (success) {
+                alert("Đã copy link! Gửi cho người nhận ngay nhé:\n" + fullLink);
+            } else {
+                // Nếu copy thất bại hoàn toàn, hiển thị prompt để user tự copy
+                prompt("Không thể tự động copy. Hãy copy link dưới đây:", fullLink);
+            }
+        }
+
+        // --- CHỨC NĂNG NGƯỜI NHẬN ---
+        
+        // 1. Kiểm tra mật khẩu
+        function checkPassword() {
+            const inputPass = document.getElementById('unlock-pass').value;
+            const realPass = atob(p_pass);
+
+            if (inputPass === realPass) {
+                document.getElementById('lock-screen').classList.add('hidden-elm');
+                document.getElementById('party-view').classList.remove('hidden-elm');
+                
+                // Reset CSS nền ban đầu
+                document.body.style.backgroundColor = '#1a1a1a';
+            } else {
+                alert("Sai mật khẩu rồi! Thử lại đi.");
+            }
+        }
+
+        // 2. Bắt đầu tiệc (Nút Tiếp Tục)
+        function startPartySequence() {
+            // Xin quyền Mic ngay khi tương tác
+            setupMicrophone();
+
+            // Ẩn nút tiếp tục
+            document.getElementById('btn-start-party').classList.add('hidden-elm');
+
+            // Đổi màu nền sang hồng
+            document.body.style.backgroundColor = '#fce4ec';
+            document.body.style.color = '#333';
+
+            // Hiện tên
+            const nameDecoded = decodeURIComponent(escape(atob(p_name)));
+            const header = document.getElementById('b-name');
+            header.innerText = "Happy Birthday " + nameDecoded + "!";
+            header.classList.remove('hidden-elm');
+            header.classList.add('title-anim');
+
+            // Bật nhạc
+            music.volume = 0.5;
+            music.play().catch(e => console.log("Autoplay blocked"));
+
+            // Hiện pháo hoa & bóng bay
+            fireConfetti();
+            createBalloons();
+
+            // Bật nến (để chuẩn bị thổi)
+            document.getElementById('candle').style.display = 'block';
+            setTimeout(() => {
+                flame.classList.add('lit');
+                // Hiện hướng dẫn thổi & Control bar
+                document.getElementById('blow-instruction').classList.remove('hidden-elm');
+                document.getElementById('controls').classList.remove('hidden-elm');
+            }, 1000);
+        }
+
+        // --- LOGIC MICROPHONE & THỔI NẾN ---
+        function setupMicrophone() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+                
+                detectBlow();
+            })
+            .catch(err => {
+                console.log('Mic denied or error', err);
+                // Không alert lỗi mic nữa để tránh làm phiền nếu không có mic
+                // alert("Bạn chưa cho phép Mic nên hãy click vào ngọn nến để thổi nhé!");
+            });
+        }
+
+        function detectBlow() {
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            function loop() {
+                if (!flame.classList.contains('lit')) return; // Nếu nến tắt thì thôi
+
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for(let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                let average = sum / bufferLength;
+
+                // Ngưỡng phát hiện thổi
+                if (average > 50) {
+                    blowOutCandle();
+                }
+
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // Hành động tắt nến
+        function blowOutCandle() {
+            if (!flame.classList.contains('lit')) return;
+
+            flame.classList.remove('lit'); // Tắt lửa
+            document.getElementById('blow-instruction').classList.add('hidden-elm'); // Ẩn hướng dẫn
+            
+            // Hiện lời chúc
+            const msg = document.getElementById('b-message');
+            msg.classList.remove('hidden-elm');
+            msg.classList.add('fade-in');
+
+            fireConfetti(); // Bắn pháo hoa lần nữa
+        }
+
+        // Fallback: Click vào lửa để tắt (nếu mic lỗi)
+        flame.addEventListener('click', blowOutCandle);
+
+        // --- CÁC NÚT CHỨC NĂNG ---
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                document.getElementById('icon-music').className = "fas fa-music";
+            } else {
+                music.pause();
+                document.getElementById('icon-music').className = "fas fa-microphone-slash"; // Icon tượng trưng tắt tiếng
+            }
+        }
+
+        function toggleCandleManual() {
+            if (flame.classList.contains('lit')) {
+                blowOutCandle();
+            } else {
+                flame.classList.add('lit');
+                document.getElementById('b-message').classList.add('hidden-elm');
+                document.getElementById('blow-instruction').classList.remove('hidden-elm');
+            }
+        }
+
+        function showInfo() {
+            alert("Hướng dẫn:\n- Thổi vào mic để tắt nến.\n- Nếu không thổi được, hãy click vào ngọn nến.\n- Tận hưởng bữa tiệc nhé!");
+        }
+
+        function shareWeb() {
+            const url = window.location.href;
+            const success = copyToClipboard(url);
+            if (success) {
+                alert("Đã copy link web!");
+            } else {
+                prompt("Copy link:", url);
+            }
+        }
+
+        // --- HIỆU ỨNG VISUAL ---
+        function createBalloons() {
+            const colors = ['rgba(255,89,94,0.7)', 'rgba(255,202,58,0.7)', 'rgba(138,201,38,0.7)', 'rgba(25,130,196,0.7)'];
+            const container = document.getElementById('balloons');
+            for(let i=0; i<20; i++) {
+                const b = document.createElement('div');
+                b.className = 'absolute w-10 h-12 rounded-full z-0 float-up';
+                b.style.left = Math.random() * 100 + 'vw';
+                b.style.background = colors[Math.floor(Math.random() * colors.length)];
+                b.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                b.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(b);
+            }
+        }
+
+        function fireConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+</body>
+</html>
