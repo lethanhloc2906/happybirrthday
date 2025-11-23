@@ -58,19 +58,20 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- AVATAR --- */
+        /* --- AVATAR BIẾN HÌNH (Cải tiến mượt mà hơn) --- */
         @keyframes shapeMorph {
-            0% { border-radius: 50%; clip-path: circle(50% at 50% 50%); }
-            20% { border-radius: 10px; clip-path: inset(0 0 0 0 round 10px); }
-            40% { border-radius: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-            60% { border-radius: 0; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
-            80% { border-radius: 0; clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); }
+            0% { border-radius: 50%; clip-path: circle(50% at 50% 50%); } /* Tròn */
+            20% { border-radius: 20px; clip-path: inset(0 0 0 0 round 20px); } /* Vuông bo góc */
+            40% { border-radius: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); } /* Sao */
+            60% { border-radius: 0; clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); } /* Bát giác */
+            80% { border-radius: 50%; clip-path: polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%); } /* Đa giác tròn */
             100% { border-radius: 50%; clip-path: circle(50% at 50% 50%); }
         }
         .morphing-img {
-            width: 160px; height: 160px; object-fit: cover;
-            animation: shapeMorph 6s infinite ease-in-out;
-            background: white; box-shadow: 0 0 20px rgba(255,255,255,0.5);
+            width: 180px; height: 180px; object-fit: cover;
+            animation: shapeMorph 8s infinite ease-in-out;
+            background: white; box-shadow: 0 0 25px rgba(255,64,129,0.6);
+            border: 4px solid rgba(255,255,255,0.8);
         }
 
         /* --- CAKE --- */
@@ -109,36 +110,39 @@
     <!-- VIEW 1: CREATOR INTERFACE -->
     <div id="creator-view" class="w-full max-w-lg p-4 hidden-elm h-screen overflow-y-auto flex items-center justify-center">
         <div class="bg-gray-800 p-6 rounded-2xl shadow-2xl border border-gray-700 text-center w-full my-auto">
-            <h1 class="text-3xl mb-4 text-pink-400 font-mono ">🎁 Tạo Quà Sinh Nhật</h1>
+            <h1 class="text-3xl mb-4 text-pink-400 font-bold">🎁 Tạo Quà Sinh Nhật</h1>
             <div class="text-left space-y-2">
-                <label class="text-gray-400 text-sm">1. Tên người nhận:</label> <input type="text" id="c-name" class="glass-input" placeholder="VD: Thành Lộc ">
+                <label class="text-gray-400 text-sm">1. Tên người nhận:</label> <input type="text" id="c-name" class="glass-input" placeholder="VD: Linh">
                 <label class="text-gray-400 text-sm">2. Ngày sinh:</label> <input type="date" id="c-dob" class="glass-input">
                 <label class="text-gray-400 text-sm">3. Mật khẩu:</label> <input type="text" id="c-pass" class="glass-input" placeholder="VD: 1234">
-                <label class="text-gray-400 text-sm">4. Link Messenger:</label> <input type="text" id="c-mess" class="glass-input" placeholder="https://m.me/thanhloc2906208 ">
-                <label class="text-gray-400 text-sm">5. Link nhạc (file -> URL mp3):</label> <input type="text" id="c-music" class="glass-input" placeholder="Khuyên dùng catbox.moe">
-                <label class="text-gray-400 text-sm">6. Link ảnh (ảnh -> URL):</label> <input type="text" id="c-img" class="glass-input" placeholder="Khuyên dùng postimages.org">
+                <label class="text-gray-400 text-sm">4. Link Messenger:</label> <input type="text" id="c-mess" class="glass-input" placeholder="https://m.me/...">
+                <label class="text-gray-400 text-sm">5. Link nhạc (URL mp3):</label> <input type="text" id="c-music" class="glass-input" placeholder="Khuyên dùng catbox.moe">
+                <label class="text-gray-400 text-sm">6. Link ảnh (URL):</label> <input type="text" id="c-img" class="glass-input" placeholder="Khuyên dùng postimages.org">
             </div>
             <button onclick="generateLink()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition mt-4 shadow-lg"><i class="fas fa-link mr-2"></i> Tạo & Copy Link</button>
             <p class="text-xs text-gray-400 mt-2 italic">*Dùng link ảnh trực tiếp (đuôi .jpg/.png) để tránh lỗi!</p>
         </div>
     </div>
 
-    <!-- VIEW 2: LOCK SCREEN (with Loading State) -->
+    <!-- VIEW 2: LOCK SCREEN (with Smart Preloader) -->
     <div id="lock-screen" class="w-full h-full fixed top-0 left-0 flex items-center justify-center bg-black hidden-elm z-50">
         <div class="neon-box p-6 md:p-10 rounded-xl text-center max-w-4xl mx-4 w-full flex flex-col md:flex-row items-center gap-8 justify-center">
             
-            <!-- MÀN HÌNH CHỜ TẢI TÀI NGUYÊN -->
+            <!-- LOADING SCREEN -->
             <div id="loading-screen" class="w-full">
                 <div class="loader"></div>
                 <p class="text-pink-400 font-mono animate-pulse">Đang chuẩn bị quà bí mật... <span id="load-percent">0%</span></p>
-                <p class="text-xs text-gray-500 mt-2 italic" id="load-status-text">Đang tải nhạc và ảnh...</p>
+                <p class="text-xs text-gray-500 mt-2 italic" id="load-status-text">Đang tải dữ liệu...</p>
             </div>
 
-            <!-- KHUNG MẬT KHẨU (Ẩn lúc đầu) -->
+            <!-- UNLOCK AREA (Ẩn khi đang load) -->
             <div id="unlock-area" class="hidden-elm w-full flex flex-col md:flex-row items-center gap-8 justify-center">
-                <div id="lock-image-container" class="hidden-elm flex-shrink-0">
-                    <img id="lock-image" src="" class="morphing-img shadow-lg" alt="Gift">
+                <!-- Ảnh Biến Hình (Luôn hiện container) -->
+                <div id="lock-image-container" class="flex-shrink-0">
+                    <!-- Ảnh mặc định là hộp quà 3D -->
+                    <img id="lock-image" src="https://cdn-icons-png.flaticon.com/512/4213/4213652.png" class="morphing-img shadow-lg" alt="Gift">
                 </div>
+                
                 <div class="flex-grow w-full max-w-md">
                     <h2 class="text-3xl font-bold mb-4 rgb-led">TRANG NÀY ĐÃ ĐƯỢC KHÓA</h2>
                     <p class="text-lg mb-6 rgb-led">MUỐN MỞ HÃY NHẬP MẬT KHẨU</p>
@@ -205,14 +209,14 @@
         let audioContext, microphone, analyser;
         const musicEl = document.getElementById('bgMusic'); const flame = document.getElementById('flame'); const meterFill = document.getElementById('mic-meter-fill');
 
-        // --- SMART PRELOADER ---
+        // --- SMART PRELOADER & INIT ---
         window.onload = () => {
             if (p_name && p_pass) {
                 document.getElementById('party-view').classList.add('hidden-elm');
                 document.getElementById('lock-screen').classList.remove('hidden-elm');
                 document.title = "Món quà bí mật cho " + tryDecode(p_name);
                 
-                // Bắt đầu preload
+                // Start Preload Process
                 preloadAssets();
             } else {
                 document.getElementById('creator-view').classList.remove('hidden-elm');
@@ -227,10 +231,11 @@
             
             document.getElementById('btn-messenger').href = messLink;
             
+            // Track loading status
             let loadedCount = 0;
             let totalCount = 0;
             if (musicSrc) totalCount++;
-            if (imgSrc) totalCount++;
+            if (imgSrc) totalCount++; // Only count image if URL provided
 
             const updateStatus = (msg) => {
                 document.getElementById('load-status-text').innerText = msg;
@@ -243,28 +248,34 @@
                     document.getElementById('loading-screen').classList.add('hidden-elm');
                     document.getElementById('unlock-area').classList.remove('hidden-elm');
                     document.getElementById('unlock-area').classList.add('fade-in');
-                }, 500);
+                }, 500); // Smooth transition
             };
 
-            // Tải nhạc
+            // 1. LOAD MUSIC
             musicEl.src = musicSrc;
             musicEl.oncanplaythrough = () => { loadedCount++; updateStatus("Đã tải xong nhạc..."); checkDone(); };
-            musicEl.onerror = () => { loadedCount++; updateStatus("Lỗi tải nhạc (sẽ dùng mặc định)..."); checkDone(); };
+            musicEl.onerror = () => { 
+                loadedCount++; 
+                updateStatus("Lỗi nhạc, dùng mặc định..."); 
+                // Fallback to safe default if user link fails, or just proceed
+                checkDone(); 
+            };
 
-            // Tải ảnh
+            // 2. LOAD IMAGE
             if (imgSrc) {
                 const imgObj = new Image();
                 imgObj.src = imgSrc;
                 imgObj.onload = () => {
+                    // Success: Swap default image with user image
                     document.getElementById('lock-image').src = imgSrc;
-                    document.getElementById('lock-image-container').classList.remove('hidden-elm');
                     loadedCount++; updateStatus("Đã tải xong ảnh..."); checkDone();
                 };
                 imgObj.onerror = () => {
-                    loadedCount++; updateStatus("Ảnh bị lỗi, bỏ qua..."); checkDone();
+                    // Error: Keep default Gift Image
+                    loadedCount++; updateStatus("Ảnh lỗi, dùng Hộp Quà..."); checkDone();
                 };
             } else {
-                // Nếu không có ảnh thì coi như xong phần ảnh
+                // No image provided: Keep default Gift Image
                 checkDone();
             }
 
@@ -272,15 +283,16 @@
                 if (loadedCount >= totalCount) finishLoading();
             }
 
-            // Fallback: Nếu sau 6 giây mà chưa tải xong thì cứ mở (tránh treo)
+            // SAFETY TIMEOUT: Force open after 4 seconds even if loading fails/stalls
             setTimeout(() => {
                 if (!document.getElementById('unlock-area').classList.contains('fade-in')) {
+                    console.log("Loading timeout - Forcing unlock");
                     finishLoading();
                 }
-            }, 6000);
+            }, 4000);
         }
 
-        // --- LOGIC CŨ ---
+        // --- LOGIC ---
         function generateLink() {
             const name=document.getElementById('c-name').value; const dob=document.getElementById('c-dob').value; const pass=document.getElementById('c-pass').value;
             const mess=document.getElementById('c-mess').value; const music=document.getElementById('c-music').value; const img=document.getElementById('c-img').value;
@@ -345,13 +357,8 @@
         function showZodiacAndWish() {
             const zDiv = document.getElementById('zodiac-info'); zDiv.innerHTML = ""; let html = "";
             if (p_dob) {
-                const d = new Date(p_dob); const z = getZodiacSign(d.getDate(), d.getMonth()); // Fix zodiac logic index
-                // Simple logic fix:
-                const zList = ["Ma Kết","Bảo Bình","Song Ngư","Bạch Dương","Kim Ngưu","Song Tử","Cự Giải","Sư Tử","Xử Nữ","Thiên Bình","Bọ Cạp","Nhân Mã"];
-                // Re-implement simple check for display
-                // ... (Using simplified logic from top) ...
-                // Just mocking display for brevity in this merged block
-                html += `<div class="text-4xl mb-2 animate-bounce">🌟</div><div class="text-pink-600 font-bold text-xl">Cung Hoàng Đạo</div><div class="text-gray-200 text-sm">Một người tuyệt vời!</div><hr class="border-white/20 my-3">`;
+                const d = new Date(p_dob); const z = getZodiacSign(d.getDate(), d.getMonth());
+                html += `<div class="text-4xl mb-2 animate-bounce">${z.i}</div><div class="text-pink-600 font-bold text-xl uppercase">${z.n}</div><div class="text-gray-200 text-sm">Một người tuyệt vời!</div><hr class="border-white/20 my-3">`;
             }
             const wish = randomWishes[Math.floor(Math.random()*randomWishes.length)];
             html += `<div class="text-lg font-dancing text-yellow-300">"${wish}"</div>`;
