@@ -51,20 +51,20 @@
             border: 4px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top: 4px solid #ff4081;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 0 auto 15px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- AVATAR BIẾN HÌNH (Cải tiến mượt mà hơn) --- */
+        /* --- AVATAR BIẾN HÌNH --- */
         @keyframes shapeMorph {
-            0% { border-radius: 50%; clip-path: circle(50% at 50% 50%); } /* Tròn */
-            20% { border-radius: 20px; clip-path: inset(0 0 0 0 round 20px); } /* Vuông bo góc */
-            40% { border-radius: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); } /* Sao */
-            60% { border-radius: 0; clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); } /* Bát giác */
-            80% { border-radius: 50%; clip-path: polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%); } /* Đa giác tròn */
+            0% { border-radius: 50%; clip-path: circle(50% at 50% 50%); }
+            20% { border-radius: 20px; clip-path: inset(0 0 0 0 round 20px); }
+            40% { border-radius: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+            60% { border-radius: 0; clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%); }
+            80% { border-radius: 50%; clip-path: polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%); }
             100% { border-radius: 50%; clip-path: circle(50% at 50% 50%); }
         }
         .morphing-img {
@@ -116,30 +116,30 @@
                 <label class="text-gray-400 text-sm">2. Ngày sinh:</label> <input type="date" id="c-dob" class="glass-input">
                 <label class="text-gray-400 text-sm">3. Mật khẩu:</label> <input type="text" id="c-pass" class="glass-input" placeholder="VD: 1234">
                 <label class="text-gray-400 text-sm">4. Link Messenger:</label> <input type="text" id="c-mess" class="glass-input" placeholder="https://m.me/...">
-                <label class="text-gray-400 text-sm">5. Link nhạc (URL mp3):</label> <input type="text" id="c-music" class="glass-input" placeholder="Khuyên dùng catbox.moe">
-                <label class="text-gray-400 text-sm">6. Link ảnh (URL):</label> <input type="text" id="c-img" class="glass-input" placeholder="Khuyên dùng postimages.org">
+                <label class="text-gray-400 text-sm">5. Link nhạc (URL mp3):</label> <input type="text" id="c-music" class="glass-input" placeholder="Dùng catbox.moe">
+                <label class="text-gray-400 text-sm">6. Link ảnh (URL):</label> <input type="text" id="c-img" class="glass-input" placeholder="Dùng postimages.org">
             </div>
             <button onclick="generateLink()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition mt-4 shadow-lg"><i class="fas fa-link mr-2"></i> Tạo & Copy Link</button>
-            <p class="text-xs text-gray-400 mt-2 italic">*Dùng link ảnh trực tiếp (đuôi .jpg/.png) để tránh lỗi!</p>
+            <p class="text-xs text-gray-400 mt-2 italic">*Đảm bảo link ảnh có đuôi .jpg hoặc .png!</p>
         </div>
     </div>
 
-    <!-- VIEW 2: LOCK SCREEN (with Smart Preloader) -->
+    <!-- VIEW 2: LOCK SCREEN (PRELOADER) -->
     <div id="lock-screen" class="w-full h-full fixed top-0 left-0 flex items-center justify-center bg-black hidden-elm z-50">
         <div class="neon-box p-6 md:p-10 rounded-xl text-center max-w-4xl mx-4 w-full flex flex-col md:flex-row items-center gap-8 justify-center">
             
             <!-- LOADING SCREEN -->
             <div id="loading-screen" class="w-full">
                 <div class="loader"></div>
-                <p class="text-pink-400 font-mono animate-pulse">Đang chuẩn bị quà bí mật... <span id="load-percent">0%</span></p>
-                <p class="text-xs text-gray-500 mt-2 italic" id="load-status-text">Đang tải dữ liệu...</p>
+                <p class="text-pink-400 font-mono text-xl animate-pulse">Đang chuẩn bị quà bí mật...</p>
+                <p class="text-sm text-gray-400 mt-2" id="load-status-text">Đang tải dữ liệu... <span id="load-percent">0%</span></p>
+                <button onclick="forceOpen()" class="mt-4 text-xs text-gray-500 hover:text-white underline">Mạng chậm? Bấm vào đây để vào ngay</button>
             </div>
 
             <!-- UNLOCK AREA (Ẩn khi đang load) -->
             <div id="unlock-area" class="hidden-elm w-full flex flex-col md:flex-row items-center gap-8 justify-center">
-                <!-- Ảnh Biến Hình (Luôn hiện container) -->
+                <!-- Ảnh Biến Hình -->
                 <div id="lock-image-container" class="flex-shrink-0">
-                    <!-- Ảnh mặc định là hộp quà 3D -->
                     <img id="lock-image" src="https://cdn-icons-png.flaticon.com/512/4213/4213652.png" class="morphing-img shadow-lg" alt="Gift">
                 </div>
                 
@@ -208,6 +208,7 @@
         const p_mess = urlParams.get('mess'); const p_music = urlParams.get('music'); const p_img = urlParams.get('img');
         let audioContext, microphone, analyser;
         const musicEl = document.getElementById('bgMusic'); const flame = document.getElementById('flame'); const meterFill = document.getElementById('mic-meter-fill');
+        let isLoaded = false;
 
         // --- SMART PRELOADER & INIT ---
         window.onload = () => {
@@ -215,8 +216,6 @@
                 document.getElementById('party-view').classList.add('hidden-elm');
                 document.getElementById('lock-screen').classList.remove('hidden-elm');
                 document.title = "Món quà bí mật cho " + tryDecode(p_name);
-                
-                // Start Preload Process
                 preloadAssets();
             } else {
                 document.getElementById('creator-view').classList.remove('hidden-elm');
@@ -227,15 +226,12 @@
         function preloadAssets() {
             const musicSrc = (p_music && p_music.trim()) ? tryDecode(p_music) : "nhacsinhnhat.mp3";
             const imgSrc = (p_img && p_img.trim()) ? tryDecode(p_img) : null;
-            const messLink = (p_mess && p_mess.trim()) ? tryDecode(p_mess) : "https://m.me/thanhloc2906208";
+            document.getElementById('btn-messenger').href = (p_mess && p_mess.trim()) ? tryDecode(p_mess) : "https://m.me/thanhloc2906208";
             
-            document.getElementById('btn-messenger').href = messLink;
-            
-            // Track loading status
             let loadedCount = 0;
             let totalCount = 0;
             if (musicSrc) totalCount++;
-            if (imgSrc) totalCount++; // Only count image if URL provided
+            if (imgSrc) totalCount++;
 
             const updateStatus = (msg) => {
                 document.getElementById('load-status-text').innerText = msg;
@@ -244,53 +240,40 @@
             };
 
             const finishLoading = () => {
+                if(isLoaded) return; isLoaded = true;
                 setTimeout(() => {
                     document.getElementById('loading-screen').classList.add('hidden-elm');
                     document.getElementById('unlock-area').classList.remove('hidden-elm');
                     document.getElementById('unlock-area').classList.add('fade-in');
-                }, 500); // Smooth transition
+                }, 500);
             };
 
-            // 1. LOAD MUSIC
+            // LOAD MUSIC
             musicEl.src = musicSrc;
-            musicEl.oncanplaythrough = () => { loadedCount++; updateStatus("Đã tải xong nhạc..."); checkDone(); };
-            musicEl.onerror = () => { 
-                loadedCount++; 
-                updateStatus("Lỗi nhạc, dùng mặc định..."); 
-                // Fallback to safe default if user link fails, or just proceed
-                checkDone(); 
-            };
+            musicEl.oncanplaythrough = () => { loadedCount++; updateStatus("Nhạc OK..."); checkDone(); };
+            musicEl.onerror = () => { loadedCount++; updateStatus("Lỗi nhạc, dùng mặc định..."); checkDone(); };
 
-            // 2. LOAD IMAGE
+            // LOAD IMAGE DIRECTLY TO DOM
             if (imgSrc) {
-                const imgObj = new Image();
-                imgObj.src = imgSrc;
-                imgObj.onload = () => {
-                    // Success: Swap default image with user image
-                    document.getElementById('lock-image').src = imgSrc;
-                    loadedCount++; updateStatus("Đã tải xong ảnh..."); checkDone();
+                const lockImg = document.getElementById('lock-image');
+                lockImg.onload = () => { loadedCount++; updateStatus("Ảnh OK..."); checkDone(); };
+                lockImg.onerror = () => { 
+                    loadedCount++; 
+                    updateStatus("Ảnh lỗi, dùng Hộp Quà..."); 
+                    lockImg.src = "https://cdn-icons-png.flaticon.com/512/4213/4213652.png"; // Revert to default
+                    checkDone(); 
                 };
-                imgObj.onerror = () => {
-                    // Error: Keep default Gift Image
-                    loadedCount++; updateStatus("Ảnh lỗi, dùng Hộp Quà..."); checkDone();
-                };
+                lockImg.src = imgSrc; // Start loading
             } else {
-                // No image provided: Keep default Gift Image
                 checkDone();
             }
 
-            function checkDone() {
-                if (loadedCount >= totalCount) finishLoading();
-            }
-
-            // SAFETY TIMEOUT: Force open after 4 seconds even if loading fails/stalls
-            setTimeout(() => {
-                if (!document.getElementById('unlock-area').classList.contains('fade-in')) {
-                    console.log("Loading timeout - Forcing unlock");
-                    finishLoading();
-                }
-            }, 4000);
+            function checkDone() { if (loadedCount >= totalCount) finishLoading(); }
+            // Safety Timeout (10s)
+            setTimeout(() => { if(!isLoaded) { console.log("Force load"); finishLoading(); } }, 10000);
         }
+
+        function forceOpen() { isLoaded = false; document.getElementById('loading-screen').classList.add('hidden-elm'); document.getElementById('unlock-area').classList.remove('hidden-elm'); }
 
         // --- LOGIC ---
         function generateLink() {
