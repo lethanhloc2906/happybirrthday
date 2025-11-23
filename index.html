@@ -27,7 +27,7 @@
             color: white;
         }
 
-        /* LED RGB Text */
+        /* --- ANIMATIONS CHỮ LED RGB --- */
         @keyframes rgbText {
             0% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
             20% { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
@@ -46,231 +46,58 @@
         .neon-box {
             box-shadow: 0 0 20px #00bcd4, inset 0 0 20px #00bcd4;
             border: 2px solid #00bcd4;
-            background-color: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             z-index: 100;
         }
 
-        /* Cake CSS */
-        .cake-container {
-            position: relative;
-            width: 250px;
-            height: 200px;
-            margin: 0 auto;
-            margin-top: 50px;
-            transition: transform 0.5s;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .plate {
-            width: 270px;
-            height: 10px;
-            background: #ddd;
-            border-radius: 10px;
-            position: absolute;
-            bottom: 0;
-            left: -10px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        }
-
-        .layer {
-            position: absolute;
-            background: var(--cake-color);
-            width: 250px;
-            height: 80px;
-            border-radius: 10px 10px 0 0;
-            bottom: 10px;
-            box-shadow: inset 0 -10px 10px rgba(0,0,0,0.05);
-        }
-
-        .layer-top {
-            bottom: 90px;
-            width: 200px;
-            left: 25px;
-            height: 70px;
-            background: #ffebee;
-        }
-
-        .icing {
-            position: absolute;
-            background: var(--icing-color);
-            width: 100%;
-            height: 20px;
-            border-radius: 10px 10px 20px 20px;
-            top: 0;
-            z-index: 1;
-        }
-
-        .drip {
-            position: absolute;
-            background: var(--icing-color);
-            width: 15px;
-            height: 35px;
-            border-radius: 0 0 10px 10px;
-            top: 10px;
-        }
-        .drip:nth-child(1) { left: 10px; height: 45px; }
-        .drip:nth-child(2) { left: 40px; height: 30px; }
-        .drip:nth-child(3) { left: 70px; height: 40px; }
-        .drip:nth-child(4) { left: 100px; height: 35px; }
-        .drip:nth-child(5) { left: 130px; height: 45px; }
-        .drip:nth-child(6) { left: 160px; height: 30px; }
-        
-        .candle {
-            position: absolute;
-            width: 16px;
-            height: 50px;
-            background: var(--candle-color);
-            bottom: 160px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            border-radius: 3px;
-            display: none; 
-            background: repeating-linear-gradient(45deg, #2196f3, #2196f3 5px, #64b5f6 5px, #64b5f6 10px);
-            cursor: pointer;
-        }
-
-        /* --- CẬP NHẬT PHẦN LỬA ĐỂ TẮT HẲN --- */
-        .flame {
-            position: absolute;
-            width: 20px;
-            height: 30px;
-            background: var(--flame-color);
-            border-radius: 50% 50% 20% 20%;
-            top: -30px;
-            left: -2px;
-            animation: flicker 1s infinite alternate;
-            cursor: pointer;
-            z-index: 30;
+        /* --- ẢNH BIẾN HÌNH (SHAPE SHIFTING AVATAR) --- */
+        @keyframes shapeMorph {
+            0% { border-radius: 50%; clip-path: circle(50% at 50% 50%); } /* Tròn */
+            20% { border-radius: 10px; clip-path: inset(0 0 0 0 round 10px); } /* Vuông bo góc */
+            40% { border-radius: 0; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); } /* Ngôi sao */
+            60thành link:</label>
+                <input type="text" id="c-img" class="glass-input" placeholder="https://i.ibb.co/example.jpg">
+            </div>
             
-            /* Trạng thái tắt: Không màu, không bóng, ẩn hoàn toàn */
-            opacity: 0;
-            box-shadow: none; 
-            visibility: hidden; 
-            transition: opacity 0.3s ease, visibility 0.3s;
-        }
-
-        /* Mở rộng vùng bấm (vẫn giữ để dễ bật/tắt nhưng khi ẩn thì visibility:hidden sẽ chặn bấm nhầm) */
-        .flame::after {
-            content: '';
-            position: absolute;
-            top: -50px; left: -50px; right: -50px; bottom: -50px;
-            background: transparent;
-            border-radius: 50%;
-            z-index: 50;
-        }
-
-        /* Trạng thái BẬT: Có màu, có bóng hào quang */
-        .flame.lit {
-            opacity: 1;
-            visibility: visible;
-            box-shadow: 0 0 10px #ffeb3b, 0 0 20px #ff9800; /* Hào quang chỉ hiện khi lit */
-        }
-
-        @keyframes flicker {
-            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
-            100% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-        }
-
-        .control-btn {
-            width: 50px;
-            height: 50px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            margin: 0 8px;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        .control-btn:hover {
-            transform: scale(1.1);
-            background: rgba(0,0,0,0.9);
-            border-color: #ff4081;
-        }
-
-        .float-up { animation: floatUp 10s linear infinite; }
-        @keyframes floatUp {
-            0% { bottom: -100px; transform: translateX(0); }
-            50% { transform: translateX(20px); }
-            100% { bottom: 120vh; transform: translateX(-20px); }
-        }
-
-        .hidden-elm { display: none !important; }
-        .fade-in { animation: fadeIn 1s forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .glass-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        #mic-meter-container {
-            width: 200px;
-            height: 10px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 5px;
-            margin: 10px auto;
-            overflow: hidden;
-            border: 1px solid #fff;
-        }
-        #mic-meter-fill {
-            height: 100%;
-            width: 0%;
-            background: #4caf50;
-            transition: width 0.1s;
-        }
-    </style>
-</head>
-<body class="h-screen w-screen flex flex-col items-center justify-center relative">
-
-    <!-- VIEW 1: CREATOR INTERFACE -->
-    <div id="creator-view" class="w-full max-w-md p-6 hidden-elm">
-        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700 text-center">
-            <h1 class="text-3xl mb-6 text-pink-400">🎁 Tạo Quà Sinh Nhật</h1>
-            <input type="text" id="c-name" class="glass-input" placeholder="Tên người nhận (VD: Linh)">
-            <input type="date" id="c-dob" class="glass-input">
-            <input type="text" id="c-pass" class="glass-input" placeholder="Đặt mật khẩu (VD: 1234)">
-            <button onclick="generateLink()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition mt-4">
+            <button onclick="generateLink()" class="w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-lg transition mt-4 shadow-lg transform active:scale-95">
                 <i class="fas fa-link mr-2"></i> Tạo & Copy Link
             </button>
-            <p class="text-xs text-gray-400 mt-4 italic">*Sau khi ấn nút, gửi link vừa copy cho người ấy nhé!</p>
+            <p class="text-xs text-gray-400 mt-2 italic">*Sau khi ấn nút, gửi link cho người ấy nhé!</p>
         </div>
     </div>
 
-    <!-- VIEW 2: LOCK SCREEN -->
+    <!-- VIEW 2: LOCK SCREEN (Màn hình khóa) -->
     <div id="lock-screen" class="w-full h-full fixed top-0 left-0 flex items-center justify-center bg-black hidden-elm z-50">
-        <div class="neon-box p-8 rounded-xl text-center max-w-md mx-4 w-full">
-            <h2 class="text-3xl font-bold mb-4 rgb-led">TRANG NÀY ĐÃ ĐƯỢC KHÓA</h2>
-            <p class="text-lg mb-6 rgb-led">MUỐN MỞ HÃY NHẬP MẬT KHẨU</p>
-            <input type="password" id="unlock-pass" class="bg-gray-900 border-b-2 border-gray-600 text-white text-center p-3 w-full mb-4 outline-none focus:border-blue-500 text-xl" placeholder="Enter password">
-            <p class="text-sm mb-6 rgb-led">NHẬP PHẢI ĐÚNG NHA</p>
-            <button onclick="checkPassword()" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold px-10 py-3 rounded-full shadow-lg hover:opacity-90 transition transform hover:scale-105">
-                Continue
-            </button>
+        <div class="neon-box p-6 md:p-10 rounded-xl text-center max-w-4xl mx-4 w-full flex flex-col md:flex-row items-center gap-8 justify-center">
+            
+            <!-- Khu vực ảnh biến hình (sẽ ẩn nếu không có link ảnh) -->
+            <div id="lock-image-container" class="hidden-elm flex-shrink-0">
+                <img id="lock-image" src="" class="morphing-img shadow-lg" alt="Secret Gift">
+            </div>
+
+            <!-- Khu vực nhập pass -->
+            <div class="flex-grow w-full max-w-md">
+                <h2 class="text-3xl font-bold mb-4 rgb-led">TRANG NÀY ĐÃ ĐƯỢC KHÓA</h2>
+                <p class="text-lg mb-6 rgb-led">MUỐN MỞ HÃY NHẬP MẬT KHẨU</p>
+                <input type="password" id="unlock-pass" class="bg-gray-900 border-b-2 border-gray-600 text-white text-center p-3 w-full mb-4 outline-none focus:border-blue-500 text-xl font-mono" placeholder="Enter password">
+                <p class="text-sm mb-6 rgb-led">NHẬP PHẢI ĐÚNG NHA</p>
+                <button onclick="checkPassword()" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold px-10 py-3 rounded-full shadow-lg hover:opacity-90 transition transform hover:scale-105">
+                    Continue
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- VIEW 3: BIRTHDAY PARTY -->
+    <!-- VIEW 3: BIRTHDAY PARTY (Bữa tiệc chính) -->
     <div id="party-view" class="hidden-elm w-full h-full flex flex-col items-center justify-center relative">
         
         <div class="z-20 text-center mt-10 absolute top-10 w-full px-4">
-            <h1 id="b-name" class="text-5xl md:text-6xl text-pink-600 mb-2 drop-shadow-lg font-bold"></h1>
+            <h1 id="b-name" class="text-4xl md:text-6xl text-pink-600 mb-2 drop-shadow-lg font-bold"></h1>
+            <p id="b-age-text" class="text-xl md:text-2xl text-pink-500 font-bold hidden-elm"></p>
         </div>
 
-        <!-- Bắt sự kiện click vào cả vùng bánh -->
         <div class="cake-container cursor-pointer z-10" id="cake-area" onclick="blowOutCandle(event)">
-            <!-- Bắt sự kiện click vào nến và lửa -->
             <div class="candle" id="candle" onclick="blowOutCandle(event)">
                 <div class="flame" id="flame" onclick="blowOutCandle(event)"></div>
             </div>
@@ -295,31 +122,70 @@
             <p class="text-xs text-gray-500 mt-2">(Hoặc chạm vào bánh để tắt)</p>
         </div>
 
-        <div id="b-message" class="hidden-elm text-center mt-8 z-20 max-w-lg px-4">
-            <p class="text-2xl text-gray-800 font-medium leading-relaxed">
-                Chúc mừng sinh nhật! Tuổi mới rực rỡ như pháo hoa, ngọt ngào như chiếc bánh này nhé! 
-            </p>
+        <!-- LỜI CHÚC & CUNG HOÀNG ĐẠO -->
+        <div id="b-message" class="hidden-elm text-center mt-4 z-20 max-w-lg px-4">
+            <div id="zodiac-info" class="hidden-elm zodiac-box">
+                <!-- Nội dung được điền bởi JS -->
+            </div>
         </div>
 
-        <div id="controls" class="absolute bottom-20 flex justify-center z-30 hidden-elm w-full px-4">
+        <div id="controls" class="absolute bottom-10 flex justify-center z-30 hidden-elm w-full px-4 gap-4 flex-wrap">
             <div class="control-btn" onclick="toggleMusic()" title="Bật/Tắt nhạc"><i class="fas fa-music" id="icon-music"></i></div>
             <div class="control-btn" onclick="toggleCandleManual(event)" title="Bật lại nến"><i class="fas fa-fire"></i></div>
             <div class="control-btn" onclick="showInfo()" title="Hướng dẫn"><i class="fas fa-info"></i></div>
             <div class="control-btn" onclick="shareWeb()" title="Chia sẻ"><i class="fas fa-share"></i></div>
-            <a href="https://m.me/thanhloc2906208" target="_blank" class="control-btn bg-blue-600 hover:bg-blue-500 border-blue-400" title="Cảm ơn (Messenger)">
-                <span class="text-xs font-bold">Cảm ơn</span>
+            <!-- Link Messenger động -->
+            <a id="btn-messenger" href="#" target="_blank" class="control-btn bg-blue-600 hover:bg-blue-500 border-blue-400 w-auto px-4" title="Cảm ơn">
+                <span class="text-sm font-bold">Cảm ơn <i class="fab fa-facebook-messenger ml-1"></i></span>
             </a>
         </div>
 
         <div id="balloons"></div>
     </div>
 
+    <!-- Audio Player -->
     <audio id="bgMusic" loop>
-        <source src="nhacsinhnhat.mp3" type="audio/mpeg">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <!-- Source sẽ được thêm bằng JS -->
     </audio>
 
     <script>
+        // --- KHO LỜI CHÚC NGẪU NHIÊN ---
+        const randomWishes = [
+            "Chúc bạn tuổi mới rực rỡ, luôn vui vẻ và thành công trên con đường mình chọn! 🌟",
+            "Sinh nhật vui vẻ! Mong mọi điều ước của bạn hôm nay đều thành hiện thực. ✨",
+            "Tuổi mới, niềm vui mới, thành công mới! Chúc bạn luôn xinh đẹp và hạnh phúc! 🌹",
+            "Chúc bạn một tuổi mới tràn đầy năng lượng, tiền đầy túi, tim đầy tình! 💖",
+            "Happy Birthday! Hãy luôn giữ nụ cười trên môi và tỏa sáng như những vì sao nhé! ⭐",
+            "Chúc bạn luôn mạnh mẽ, kiên cường và đạt được mọi mục tiêu trong cuộc sống! 💪",
+            "Thêm một tuổi mới là thêm một hành trình thú vị. Tận hưởng nhé! 🎂"
+        ];
+
+        // --- HÀM TÍNH CUNG HOÀNG ĐẠO ---
+        function getZodiacSign(day, month) {
+            const zodiacSigns = [
+                { name: "Ma Kết (Capricorn)", icon: "♑", start: { m: 12, d: 22 }, end: { m: 1, d: 19 } },
+                { name: "Bảo Bình (Aquarius)", icon: "♒", start: { m: 1, d: 20 }, end: { m: 2, d: 18 } },
+                { name: "Song Ngư (Pisces)", icon: "♓", start: { m: 2, d: 19 }, end: { m: 3, d: 20 } },
+                { name: "Bạch Dương (Aries)", icon: "♈", start: { m: 3, d: 21 }, end: { m: 4, d: 19 } },
+                { name: "Kim Ngưu (Taurus)", icon: "♉", start: { m: 4, d: 20 }, end: { m: 5, d: 20 } },
+                { name: "Song Tử (Gemini)", icon: "♊", start: { m: 5, d: 21 }, end: { m: 6, d: 20 } },
+                { name: "Cự Giải (Cancer)", icon: "♋", start: { m: 6, d: 21 }, end: { m: 7, d: 22 } },
+                { name: "Sư Tử (Leo)", icon: "♌", start: { m: 7, d: 23 }, end: { m: 8, d: 22 } },
+                { name: "Xử Nữ (Virgo)", icon: "♍", start: { m: 8, d: 23 }, end: { m: 9, d: 22 } },
+                { name: "Thiên Bình (Libra)", icon: "♎", start: { m: 9, d: 23 }, end: { m: 10, d: 22 } },
+                { name: "Bọ Cạp (Scorpio)", icon: "♏", start: { m: 10, d: 23 }, end: { m: 11, d: 21 } },
+                { name: "Nhân Mã (Sagittarius)", icon: "♐", start: { m: 11, d: 22 }, end: { m: 12, d: 21 } }
+            ];
+
+            if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return zodiacSigns[0];
+            for (let i = 1; i < zodiacSigns.length; i++) {
+                const s = zodiacSigns[i];
+                if ((month == s.start.m && day >= s.start.d) || (month == s.end.m && day <= s.end.d)) return s;
+            }
+            return null;
+        }
+
+        // --- COPY CLIPBOARD HELPER ---
         function copyToClipboard(text) {
             const textArea = document.createElement("textarea");
             textArea.value = text;
@@ -331,31 +197,56 @@
             try {
                 const successful = document.execCommand('copy');
                 return successful;
-            } catch (err) {
-                return false;
-            } finally {
-                document.body.removeChild(textArea);
-            }
+            } catch (err) { return false; } finally { document.body.removeChild(textArea); }
         }
 
+        // --- XỬ LÝ URL PARAMS ---
         const urlParams = new URLSearchParams(window.location.search);
         const p_name = urlParams.get('name');
         const p_dob = urlParams.get('dob');
         const p_pass = urlParams.get('pass'); 
+        const p_mess = urlParams.get('mess');
+        const p_music = urlParams.get('music');
+        const p_img = urlParams.get('img');
 
         let audioContext;
         let microphone;
         let analyser;
-        const music = document.getElementById('bgMusic');
+        const musicEl = document.getElementById('bgMusic');
         const flame = document.getElementById('flame');
         const meterFill = document.getElementById('mic-meter-fill');
         
+        // --- KHỞI TẠO TRANG ---
         window.onload = () => {
             if (p_name && p_pass) {
+                // CHẾ ĐỘ NGƯỜI NHẬN
                 document.getElementById('party-view').classList.add('hidden-elm');
                 document.getElementById('lock-screen').classList.remove('hidden-elm');
                 document.title = "Món quà bí mật cho " + tryDecode(p_name);
+                
+                // Load Ảnh Lock Screen
+                if (p_img && p_img.trim() !== "") {
+                    const imgUrl = tryDecode(p_img);
+                    document.getElementById('lock-image').src = imgUrl;
+                    document.getElementById('lock-image-container').classList.remove('hidden-elm');
+                }
+
+                // Load Nhạc
+                let musicSrc = "nhacsinhnhat.mp3"; 
+                if (p_music && p_music.trim() !== "") {
+                    musicSrc = tryDecode(p_music);
+                }
+                musicEl.src = musicSrc;
+
+                // Load Link Messenger
+                let messLink = "https://m.me/thanhloc2906208"; 
+                if (p_mess && p_mess.trim() !== "") {
+                    messLink = tryDecode(p_mess);
+                }
+                document.getElementById('btn-messenger').href = messLink;
+
             } else {
+                // CHẾ ĐỘ NGƯỜI TẠO
                 document.getElementById('creator-view').classList.remove('hidden-elm');
                 document.body.style.backgroundColor = '#1f2937';
             }
@@ -365,19 +256,34 @@
             try { return decodeURIComponent(escape(atob(str))); } catch(e) { return str; }
         }
 
+        // --- TẠO LINK (Người tạo) ---
         function generateLink() {
             const name = document.getElementById('c-name').value;
             const dob = document.getElementById('c-dob').value;
             const pass = document.getElementById('c-pass').value;
-            if(!name || !pass) { alert("Vui lòng nhập tên và mật khẩu!"); return; }
-            const encodedName = btoa(unescape(encodeURIComponent(name)));
-            const encodedPass = btoa(pass);
+            const mess = document.getElementById('c-mess').value;
+            const music = document.getElementById('c-music').value;
+            const img = document.getElementById('c-img').value;
+
+            if(!name || !pass) { alert("Vui lòng nhập Tên và Mật khẩu!"); return; }
+
+            const eName = btoa(unescape(encodeURIComponent(name)));
+            const ePass = btoa(pass);
+            const eMess = mess ? btoa(unescape(encodeURIComponent(mess))) : "";
+            const eMusic = music ? btoa(unescape(encodeURIComponent(music))) : "";
+            const eImg = img ? btoa(unescape(encodeURIComponent(img))) : "";
+            
             const currentUrl = window.location.href.split('?')[0];
-            const fullLink = `${currentUrl}?name=${encodedName}&dob=${dob}&pass=${encodedPass}`;
+            let fullLink = `${currentUrl}?name=${eName}&dob=${dob}&pass=${ePass}`;
+            if(eMess) fullLink += `&mess=${eMess}`;
+            if(eMusic) fullLink += `&music=${eMusic}`;
+            if(eImg) fullLink += `&img=${eImg}`;
+
             if (copyToClipboard(fullLink)) alert("Đã copy link! Gửi cho người ấy ngay nhé:\n" + fullLink);
             else prompt("Copy link:", fullLink);
         }
 
+        // --- KIỂM TRA PASSWORD (Người nhận) ---
         function checkPassword() {
             const inputPass = document.getElementById('unlock-pass').value;
             const realPass = atob(p_pass);
@@ -393,6 +299,7 @@
             }
         }
 
+        // --- BẮT ĐẦU TIỆC ---
         function startPartySequence() {
             setupMicrophone();
             if (audioContext && audioContext.state === 'suspended') {
@@ -401,13 +308,27 @@
             document.getElementById('btn-start-party').classList.add('hidden-elm');
             document.body.style.backgroundColor = '#ffebee';
             document.body.style.color = '#333';
+            
             const nameDecoded = tryDecode(p_name);
-            const header = document.getElementById('b-name');
-            header.innerText = "Happy Birthday " + nameDecoded + "!";
-            header.classList.remove('hidden-elm');
-            header.classList.add('title-anim');
-            music.volume = 0.6;
-            music.play().catch(e => console.log("Cần tương tác để phát nhạc"));
+            document.getElementById('b-name').innerText = "Happy Birthday " + nameDecoded + "!";
+            
+            // Tính Tuổi
+            if (p_dob) {
+                const birthDate = new Date(p_dob);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                const ageText = document.getElementById('b-age-text');
+                ageText.innerText = `Chúc mừng sinh nhật lần thứ ${age}! 🎉`;
+                ageText.classList.remove('hidden-elm');
+                ageText.classList.add('title-anim');
+            }
+
+            musicEl.volume = 0.6;
+            musicEl.play().catch(e => console.log("Cần tương tác để phát nhạc"));
             fireConfetti();
             createBalloons();
             document.getElementById('candle').style.display = 'block';
@@ -418,74 +339,81 @@
             }, 1000);
         }
 
+        // --- MICROPHONE LOGIC ---
         function setupMicrophone() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                console.log("Mic not supported");
-                return;
-            }
-            navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { console.log("Mic not supported"); return; }
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioContext.createAnalyser();
                 microphone = audioContext.createMediaStreamSource(stream);
                 microphone.connect(analyser);
                 analyser.fftSize = 256;
                 detectBlow();
-            })
-            .catch(err => {
-                console.log('Lỗi mic:', err);
-            });
+            }).catch(err => { console.log('Lỗi mic:', err); });
         }
 
         function detectBlow() {
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
-
             function loop() {
                 if (!flame.classList.contains('lit')) return;
-
                 analyser.getByteFrequencyData(dataArray);
                 let sum = 0;
-                for(let i = 0; i < bufferLength; i++) {
-                    sum += dataArray[i];
-                }
+                for(let i = 0; i < bufferLength; i++) { sum += dataArray[i]; }
                 let average = sum / bufferLength;
-
                 let strength = Math.min(100, (average / 40) * 100);
                 meterFill.style.width = strength + "%";
-
-                if (average > 30) { // Ngưỡng thổi
-                    blowOutCandle();
-                }
+                if (average > 30) { blowOutCandle(); }
                 requestAnimationFrame(loop);
             }
             loop();
         }
 
-        // Hàm tắt nến
+        // --- TẮT NẾN ---
         function blowOutCandle(event) {
             if(event) event.stopPropagation();
-
             if (!flame.classList.contains('lit')) return;
-
-            // Xóa class lit để tắt các hiệu ứng sáng
             flame.classList.remove('lit'); 
-            
             document.getElementById('blow-instruction').classList.add('hidden-elm');
-            const msg = document.getElementById('b-message');
-            msg.classList.remove('hidden-elm');
-            msg.classList.add('fade-in');
+            showZodiacAndWish();
             fireConfetti();
         }
 
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
-                document.getElementById('icon-music').className = "fas fa-music";
-            } else {
-                music.pause();
-                document.getElementById('icon-music').className = "fas fa-microphone-slash";
+        // --- HIỆN LỜI CHÚC & CUNG ---
+        function showZodiacAndWish() {
+            const zodiacDiv = document.getElementById('zodiac-info');
+            zodiacDiv.innerHTML = "";
+            let contentHTML = "";
+
+            if (p_dob) {
+                const birthDate = new Date(p_dob);
+                const day = birthDate.getDate();
+                const month = birthDate.getMonth() + 1;
+                const zodiac = getZodiacSign(day, month);
+
+                if (zodiac) {
+                    contentHTML += `
+                        <div class="text-4xl mb-2 animate-bounce">${zodiac.icon}</div>
+                        <div class="text-pink-600 font-bold text-xl uppercase mb-1">${zodiac.name}</div>
+                        <div class="text-gray-200 text-sm mb-4">"Wao, một ${zodiac.name} đầy cá tính! Chúc bạn tuổi mới rực rỡ."</div>
+                        <hr class="border-white/20 my-3">
+                    `;
+                }
             }
+
+            const randomWish = randomWishes[Math.floor(Math.random() * randomWishes.length)];
+            contentHTML += `<div class="text-lg font-dancing text-yellow-300">"${randomWish}"</div>`;
+
+            zodiacDiv.innerHTML = contentHTML;
+            zodiacDiv.classList.remove('hidden-elm');
+            document.getElementById('b-message').classList.remove('hidden-elm');
+            document.getElementById('b-message').classList.add('fade-in');
+        }
+
+        // --- CONTROLS ---
+        function toggleMusic() {
+            if (musicEl.paused) { musicEl.play(); document.getElementById('icon-music').className = "fas fa-music"; } 
+            else { musicEl.pause(); document.getElementById('icon-music').className = "fas fa-microphone-slash"; }
         }
 
         function toggleCandleManual(event) {
@@ -495,22 +423,15 @@
             } else {
                 flame.classList.add('lit');
                 document.getElementById('b-message').classList.add('hidden-elm');
+                document.getElementById('zodiac-info').classList.add('hidden-elm');
                 document.getElementById('blow-instruction').classList.remove('hidden-elm');
                 meterFill.style.width = "0%";
                 setupMicrophone(); 
             }
         }
 
-        function showInfo() {
-            alert("Hướng dẫn:\n- Thổi mạnh vào mic (thanh màu xanh sẽ chạy).\n- Nếu không được, chạm vào ngọn lửa.\n- Bật max volume nhé!");
-        }
-
-        function shareWeb() {
-            const url = window.location.href;
-            if (copyToClipboard(url)) alert("Đã copy link web!");
-            else prompt("Copy link:", url);
-        }
-
+        function showInfo() { alert("Hướng dẫn:\n- Thổi mạnh vào mic (thanh màu xanh sẽ chạy).\n- Nếu không được, chạm vào ngọn lửa.\n- Bật max volume nhé!"); }
+        function shareWeb() { const url = window.location.href; if (copyToClipboard(url)) alert("Đã copy link web!"); else prompt("Copy link:", url); }
         function createBalloons() {
             const colors = ['rgba(255,89,94,0.7)', 'rgba(255,202,58,0.7)', 'rgba(138,201,38,0.7)', 'rgba(25,130,196,0.7)'];
             const container = document.getElementById('balloons');
@@ -524,10 +445,7 @@
                 container.appendChild(b);
             }
         }
-
-        function fireConfetti() {
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
+        function fireConfetti() { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); }
     </script>
 </body>
 </html>
